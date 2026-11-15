@@ -1,0 +1,17 @@
+# fresh set build (stages in order; indictrans2 and xlit need their own environments, see requirements.txt),
+# prefixes. Outputs contain harmful prompts.
+stages: [pairs, indictrans2, devanagari, romanize, guard_filter, conversations, xlit, prefixes]
+out: runs/data_fresh
+pairs: runs/data_fresh
+seed: 42
+device: cuda
+thresholds: {overlap: 0.85, dedup: 0.90, pair: 0.60, family_distance: 0.25}
+calibration_pairs: {aya_redteaming_hi: 80, harmbench: 20}
+manual: null
+guard: Qwen/Qwen3Guard-Gen-8B
+guard_revision: 4505cb1a6f1864f21f8b27f7daf1b9a1aab6edbb
+n_test: 200
+prefix_pool: runs/fresh_v1/step2/v2_pool.json
+prefix_pools: {main: runs/fresh_v1/step2/v2_pool.json}
+prefix_latn: runs/fresh_v1/prefix_latn/prefixes.json
+xlit: {rows: runs/data_fresh/conversations.jsonl, split: test, out: runs/data_fresh/xlit_test.jsonl}

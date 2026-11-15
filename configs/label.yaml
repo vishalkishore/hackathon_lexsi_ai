@@ -1,0 +1,4 @@
+# v4 labels (env: LLM_PRIMARY_ENDPOINT, LLM_PRIMARY_KEY, LLM_PRIMARY_DEPLOYMENT; fallback local Qwen3.5-27B-FP8).
+dirs: [runs/final_step5/gen/fresh]
+labels: runs/rescore_v4/cache.jsonl
+v3: false

@@ -1,0 +1,13 @@
+# tables/main.csv (Step 5) and tables/capability.csv from stored generations + v4 labels.
+step5: runs/final_step5/gen/fresh
+labels: runs/rescore_v4/cache.jsonl
+capability: runs/final_step5/capability
+capability_arms: [Zb, N+Sw]
+out: runs/tables
+# Gold gap closed (Transliteration = gold): same prompts and depth; romanized Hindi.
+gold_gap:
+  exploration_d0: {dir: runs/multiturn_v2/heldout_E/v2d0, base: Zb, gold: N, methods: [Sw, Sr, Rw, Rr, Zr]}
+  exploration_d5: {dir: runs/multiturn_v2/heldout_E/v1d5, base: Zb, gold: N, methods: [Sw, Sr, Rw, Rr, Zr]}
+  exploration_d8: {dir: runs/multiturn_v2/heldout_E/v2d8, base: Zb, gold: N, methods: [Sw, Sr, Rw, Rr, Zr]}
+  fresh_gold_plus: {dir: runs/final_step5/gen/fresh, base: Zb, gold: N, methods: [N+Sw, N+Rw, N+G, N+Sw_old, N+Rw_old]}
+  fresh_raw: {dir: runs/raw_repair/gen, base: Zb, gold: N, methods: [Gate-raw, Read-raw, Read+Gate-raw]}

@@ -1,0 +1,13 @@
+# Base audit (R1 script gap, R2 depth drop + same-language prefix control Zl): base weights, no repair.
+conversations: runs/fresh_v1/step2/conversations.jsonl
+split: test
+runs: [hi-Latn:Zb:0, hi-Latn:Zb:8, hi-Deva:Zb:0, hi-Deva:Zb:8, en-hi:Zb:0, en-hi:Zb:8, en:Zb:0, en:Zb:8, hi-Latn:Zl:8]
+prefix_latn: runs/fresh_v1/prefix_latn/prefixes.json
+xlit: runs/fresh_v1/xlit/xlit.jsonl
+fit: runs/final_step5/fit
+old: {directions: runs/multiturn_v2/calib_w/directions.pt, thresholds: runs/fresh_v1/step3/thresholds.json}
+r_hat: runs/refusal_direction_v1/fit/directions.pt
+read_delta: runs/overnight_v2/read_final/delta_final.pt
+beta: 16.0
+max_new_tokens: 2048
+out: runs/audit

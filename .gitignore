@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+runs/
+# paper: only the PDF is published
+paper/*
+!paper/main.pdf

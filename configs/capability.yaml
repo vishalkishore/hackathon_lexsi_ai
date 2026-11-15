@@ -1,0 +1,13 @@
+# GSM8K (all 1,319 test items) and XSTest, single turn, English (N is the identity). Arms per prereg: Zb, N, best arm.
+arms: [Zb, N+Sw]
+gsm8k_revision: 740312add88f781978c0658806c59bc2815b9866
+gsm8k_n: 1319
+xstest: walledai/XSTest
+xstest_split: test
+xstest_revision: f1d713187c61b6ae64e602d74f0b3d812cc2e8e8
+fit: runs/final_step5/fit
+r_hat: runs/refusal_direction_v1/fit/directions.pt
+read_delta: runs/overnight_v2/read_final/delta_final.pt
+beta: 16.0
+max_new_tokens: 2048
+out: runs/final_step5/capability

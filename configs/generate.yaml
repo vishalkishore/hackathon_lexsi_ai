@@ -1,0 +1,14 @@
+# Step 5 arms on the fresh test split. HF greedy, batch 16, seed 42.
+conversations: runs/fresh_v1/step2/conversations.jsonl
+split: test
+runs: [hi-Latn:Zb:8, hi-Latn:N:8, hi-Latn:N+Sw:8, hi-Latn:N+G:8, hi-Latn:N+Sw_old:8, hi-Latn:N+Rw:8, hi-Latn:N+Rw_old:8,
+       hi-Latn:Zb:0, hi-Latn:N:0, hi-Latn:N+Sw:0, hi-Latn:N+G:0, hi-Latn:N+Sw_old:0, hi-Latn:N+Rw:0, hi-Latn:N+Rw_old:0]
+xlit: runs/fresh_v1/xlit/xlit.jsonl
+fit: runs/final_step5/fit
+old: {directions: runs/multiturn_v2/calib_w/directions.pt, thresholds: runs/fresh_v1/step3/thresholds.json}
+r_hat: runs/refusal_direction_v1/fit/directions.pt
+read_delta: runs/overnight_v2/read_final/delta_final.pt
+prefix_latn: runs/fresh_v1/prefix_latn/prefixes.json
+beta: 16.0
+max_new_tokens: 2048
+out: runs/step5

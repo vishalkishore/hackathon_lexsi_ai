@@ -1,0 +1,8 @@
+# Builds hf_models/aya8b-hindi-safety-N-Sw and -N-Rw from the Step 5 fit (merged weights need ~17 GB RAM, CPU).
+fit: runs/final_step5/fit
+r_hat: runs/refusal_direction_v1/fit/directions.pt
+read_delta: runs/overnight_v2/read_final/delta_final.pt
+beta: 16.0
+cards: model_cards
+merge: true
+out: hf_models

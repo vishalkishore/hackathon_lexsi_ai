@@ -1,0 +1,12 @@
+# Mechanism on the 333 correction pairs. build_cache: true runs the GPU activation pass first.
+build_cache: false
+correction:
+  heretic: data/aya8b-hindi-safety-prompts/data/heretic/pairs_main_prefixes.parquet
+  prefixes: data/aya8b-hindi-safety-prompts/data/prefixes.parquet
+cache: runs/multiturn_v2/m0_cache/base
+pairs: runs/multiturn_v2/m0_cache/pairs.json
+probe_layer: 19
+ablation_layers: []          # e.g. [8, 12, 16, 19] (GPU generation)
+r_hat: runs/refusal_direction_v1/fit/directions.pt
+max_new_tokens: 512
+out: runs/mechanism

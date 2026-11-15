@@ -1,0 +1,11 @@
+# Step 5 fits on the fresh calibration split (prereg d123cd4). Layer 19 = output of layers[18].
+conversations: runs/fresh_v1/step2/conversations.jsonl
+xlit_calibration: runs/final_step5/xlit_calib/xlit.jsonl
+r_hat: runs/refusal_direction_v1/fit/directions.pt
+read_delta: runs/overnight_v2/read_final/delta_final.pt
+scripts: [hi-Latn, en-hi, en, hi-Deva]
+depths: [0, 2, 5, 8]
+gate_depths: [0, 8]
+alpha: 0.05
+out: runs/fit
+read_edit: null   # to refit the Read edit (GPU): {correction: {heretic: .../heretic/pairs_main_prefixes.parquet, prefixes: .../prefixes.parquet}, deva_answers, layer: 16, mu: 1.0, gamma: 1.0, out}

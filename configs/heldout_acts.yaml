@@ -1,0 +1,13 @@
+# Held-out split activations for the exploration-set paper (forward only).
+heretic: {main: ../hf_datasets/aya8b-hindi-safety-prompts/data/heretic/pairs_main_prefixes.parquet, pilot: ../hf_datasets/aya8b-hindi-safety-prompts/data/heretic/pairs_pilot_prefixes.parquet}
+prefixes: ../hf_datasets/aya8b-hindi-safety-prompts/data/prefixes.parquet
+xlit: ../../runs/normalize_v1/xlit.jsonl
+batch_size: 4
+out: ../../runs/heldout_mech
+heldout_runs: {0: ../../runs/multiturn_v2/heldout_E/v2d0, 5: ../../runs/multiturn_v2/heldout_E/v1d5, 8: ../../runs/multiturn_v2/heldout_E/v2d8}
+r_hat: ../../runs/refusal_direction_v1/fit/directions.pt
+w: ../../runs/multiturn_v2/calib_w/directions.pt
+cache: ../../runs/multiturn_v2/m0_cache/base/h.pt
+cache_pairs: ../../runs/multiturn_v2/m0_cache/pairs.json
+fit_pairs: ../../runs/heldout_mech/fit_pairs.json   # the 250 non-sweep fitting pairs w was fit on (ov_common.sweep_pairs)
+n_boot: 4000

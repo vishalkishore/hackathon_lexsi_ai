@@ -1,0 +1,10 @@
+# Alignment cosine (docs/prereg_alignment.md). Forward passes only (GPU), then CPU statistics.
+conversations: ../../runs/fresh_v1/step2/conversations.jsonl
+xlit: ../../runs/fresh_v1/xlit/xlit.jsonl
+r_hat: ../../runs/refusal_direction_v1/fit/directions.pt
+w_new: ../../runs/final_step5/fit/directions.pt
+w_old: ../../runs/multiturn_v2/calib_w/directions.pt
+n_boot: 4000
+out: ../../runs/alignment
+batch_size: 4
+xlit_calibration: ../../runs/final_step5/xlit_calib/xlit.jsonl

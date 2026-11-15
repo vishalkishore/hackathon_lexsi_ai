@@ -1,0 +1,18 @@
+accelerate==1.15.0
+datasets==5.1.0
+huggingface-hub==1.33.0
+numpy==2.3.5
+openai==3.42.0
+pandas==3.1.0
+pyarrow==26.0.0
+pyyaml==6.0.3
+sacrebleu==2.6.0
+scikit-learn==1.9.1
+scipy==1.18.1
+sentence-transformers==6.3.0
+torch==2.13.0
+transformers==5.19.0
+vllm==0.32.0
+# torch / vllm builds used: torch 2.13.0+cu130, CUDA 13.0, RTX A6000 (48 GB)
+# separate environments (README): IndicXlit = ai4bharat-transliteration + fairseq 0.12.2 (Python 3.10);
+# IndicTrans2 = transformers==4.46.3, IndicTransToolkit==1.1.1
