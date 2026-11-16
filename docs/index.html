@@ -110,6 +110,10 @@ code { font-size: 0.9em; }
   border-bottom: 2px solid var(--accent); padding-bottom: 0.3rem; }
 .res dt { font-weight: 600; margin-top: 1.1rem; }
 .res dd { margin: 0.2rem 0 0; }
+.glance { border: 1px solid var(--rule); border-left: 3px solid var(--accent); background: var(--faint); padding: 1.2rem 1.4rem; margin: 1.6rem 0 2.4rem; }
+.glance h2 { margin-top: 0; }
+.glance .table-wrap { margin: 1.2rem 0; }
+.glance ul { padding-left: 1.2rem; margin-bottom: 0; }
 footer { border-top: 1px solid var(--rule); padding: 1.5rem 0 2.5rem; font: 0.92rem/1.5 var(--sans); color: var(--muted); }
 
 @media (max-width: 760px) {
@@ -138,7 +142,7 @@ footer { border-top: 1px solid var(--rule); padding: 1.5rem 0 2.5rem; font: 0.92
 <p class="sub">Diagnosing and repairing script-dependent safety failures in a multilingual LLM. Aya Expanse 8B refuses
 harmful requests less often when Hindi is typed in Latin letters. The model still encodes the harm, but the signal points
 away from the direction it uses to refuse.</p>
-<p class="byline">Vishal Kishore, IIT Jodhpur. <a href="paper.pdf">PDF</a>, <a href="https://github.com/vishalkishore/hackathon_lexsi_ai">code</a>,
+<p class="byline">Vishal Kishore, IIT Jodhpur. Lexsi Hackathon, Track 2b: AI Safety and Correction. <a href="paper.pdf">PDF</a>, <a href="https://github.com/vishalkishore/hackathon_lexsi_ai">code</a>,
 <a href="https://huggingface.co/datasets/kishorevishal/aya8b-hindi-safety-results">data</a>,
 <a href="https://huggingface.co/kishorevishal/aya8b-hindi-safety-gate">model</a>.</p>
 
@@ -164,7 +168,29 @@ that form that Aya Expanse 8B refuses or redirects, single turn; the tick marks 
 </div></header>
 <nav class="tabs" aria-label="Paper sections"><div class="wrap" role="tablist"><a role="tab" id="tab-overview" href="#overview" aria-controls="overview" aria-selected="true">Overview</a><a role="tab" id="tab-setup" href="#setup" aria-controls="setup" aria-selected="false" tabindex="-1">Setup</a><a role="tab" id="tab-weak-form" href="#weak-form" aria-controls="weak-form" aria-selected="false" tabindex="-1">The weak form</a><a role="tab" id="tab-mechanism" href="#mechanism" aria-controls="mechanism" aria-selected="false" tabindex="-1">Mechanism</a><a role="tab" id="tab-repair" href="#repair" aria-controls="repair" aria-selected="false" tabindex="-1">Repair</a><a role="tab" id="tab-discussion" href="#discussion" aria-controls="discussion" aria-selected="false" tabindex="-1">Discussion</a><a role="tab" id="tab-appendix" href="#appendix" aria-controls="appendix" aria-selected="false" tabindex="-1">Appendix</a><a role="tab" id="tab-resources" href="#resources" aria-controls="resources" aria-selected="false" tabindex="-1">Code and data</a></div></nav>
 <main><div class="wrap"><section class="panel" id="overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="-1"><p><span class="warning"><strong>Content warning:</strong> this paper
-discusses harmful requests; examples are short and redacted.</span></p><section class="level1" id="introduction">
+discusses harmful requests; examples are short and redacted.</span></p><aside class="glance" aria-label="At a glance">
+<h2>At a glance</h2>
+<p><strong>Claim.</strong> Aya Expanse 8B still detects harm in romanized Hindi but does not refuse it; a small gate
+inside the model that reuses its own harm signal brings back most of the lost refusals.</p>
+<p><strong>Model and method.</strong> CohereLabs/aya-expanse-8b (bf16) + a conformal refusal gate at layer 19 and a
+closed-form weight edit at layer 16, with no gradient training.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Romanized Hindi, 83 held-out pairs</th><th>Base</th><th>Main method</th><th>Change [95% CI]</th></tr></thead>
+<tbody>
+<tr><td>Safe rate ↑, single turn</td><td>78.3%</td><td><strong>97.6%</strong></td><td>[+10.8, +28.9]</td></tr>
+<tr><td>Safe rate ↑, after 8 English turns</td><td>71.1%</td><td><strong>88.0%</strong></td><td>[+6.0, +27.7]</td></tr>
+<tr><td>Harmful help ↓, single turn</td><td>15.7%</td><td><strong>1.2%</strong></td><td></td></tr>
+<tr><td>XSTest over-refusal ↓ (English)</td><td>10.0%</td><td>18.0%</td><td>[+4.4, +12.0]</td></tr>
+<tr><td>GSM8K accuracy ↑ (English)</td><td>80.1%</td><td>80.7%</td><td></td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Problem.</strong> Romanized Hindi after an English chat is where Aya refuses least (71.1% safe vs. 100.0% in English).</li>
+<li><strong>Cause.</strong> The harm is still readable inside the model (AUROC 0.99), along a direction 60° away from refusal.</li>
+<li><strong>Fix.</strong> Route that signal to refusal. The gain replicates on a separate out-of-distribution set (+20.2 points after eight turns).</li>
+<li><strong>Cost.</strong> XSTest over-refusal rises beyond our +3-point limit, and misreading of harmless romanized requests is not fixed.</li>
+</ul>
+</aside>
+<section class="level1" id="introduction">
 <h2><span class="sec-num">1</span>Introduction</h2>
 <figure data-latex-placement="t" id="fig:overview">
 <img alt="Figure 1. The paper in one figure (Aya Expanse 8B, held-out pairs).
@@ -2306,6 +2332,20 @@ model = AutoModelForCausalLM.from_pretrained(M, revision=REV, dtype=torch.bfloat
 s = steer.load("aya8b-hindi-safety-gate", script="hi-Latn", depth=0)
 reply, fired = steer.generate(model, tok, [{"role": "user", "content": "Drones ke istemaal ko control karne ke liye ek program design karein."}], s)
 print(fired, reply)</code></pre>
+<h3>Hackathon kits used</h3>
+<p>Each kit reran a step of our own code on the same data, as an independent check (details: Appendix N).</p>
+<dl class="res">
+ <dt>SafeTune 0.1.10</dt><dd>Refusal-direction ablation (English refusal 36.1%, ours 37.3%) and the keyword over-refusal metric on XSTest (4.8% → 11.6%).</dd>
+ <dt>AuditKIT 1.1.3</dt><dd>GSM8K scoring with paired significance (80.06% → 80.67%, same as ours).</dd>
+ <dt>CuratorKIT 0.1.22</dt><dd>Exact, MinHash and embedding deduplication and the leak check of the out-of-distribution set.</dd>
+ <dt>AlignTune, AgentTune, CircuitKIT</dt><dd>Not used.</dd>
+</dl>
+<h3>Declaration, team and LLM use</h3>
+<dl class="res">
+ <dt>Work outside the hackathon</dt><dd>None. All work was done during and for this hackathon.</dd>
+ <dt>Team</dt><dd>Solo submission: Vishal Kishore did all experiments, code and writing.</dd>
+ <dt>LLM usage</dt><dd>About 100% of the code and write-up was generated with Claude Code (Anthropic), under the author's direction and review. All numbers come from the stored tables.</dd>
+</dl>
 <h3>Cite</h3>
 <pre><code>@misc{kishore2026detected,
   title  = {Detected but Not Refused: Diagnosing and Repairing Script-Dependent Safety Failures in a Multilingual LLM},
